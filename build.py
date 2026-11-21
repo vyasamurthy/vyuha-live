@@ -77,7 +77,7 @@ assert_(pos == sorted(pos), "precedence classes appear out of order")
 
 # the verified render figure must survive the build
 assert_("99 files written to ./lab-repo" in src, "verified render output missing")
-assert_("4,059" in src, "verified test-case count missing")
+assert_("4,092" in src, "verified test-case count missing")
 assert_("2,933" not in src, "stale test count still present")
 
 # every layer in the repository's module table must appear
