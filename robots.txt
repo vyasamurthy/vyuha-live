@@ -1,0 +1,14 @@
+# vyuha.live — Venture Vertex LLC
+# Public marketing site. Nothing here is private and nothing is generated
+# per-visitor, so everything is crawlable.
+#
+# This file exists rather than being left to 404. A missing robots.txt is
+# allow-all to the major crawlers, but several fetchers and link-preview
+# agents treat "could not read" as "must not fetch" — so the absence that
+# reads as permissive to one reader reads as a refusal to another, and a
+# site nobody can fetch is a site nobody links.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://vyuha.live/sitemap.xml
