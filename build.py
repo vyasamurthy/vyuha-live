@@ -8,7 +8,7 @@ before writing anything.
 import base64, pathlib, re, sys
 
 HERE = pathlib.Path(__file__).parent
-VERSION = "1.3.0"
+VERSION = "1.4.0"
 
 src = (HERE / "src.html").read_text()
 js = (HERE / "instruments.js").read_text()
@@ -59,6 +59,10 @@ BANNED = [
     "Kubecost", "CAST AI", "Run:ai", "SkyPilot", "Finout", # named only in the problem framing
     "patent pending", "patent-pending", "Patent Pending",
 ]
+def low_early(t):
+    return t.lower()
+
+
 low = src.lower()
 for b in BANNED:
     # the competitor framing line is the single deliberate exception
@@ -78,6 +82,10 @@ assert_(pos == sorted(pos), "precedence classes appear out of order")
 # the verified render figure must survive the build
 assert_("99 files written to ./lab-repo" in src, "verified render output missing")
 assert_("4,092" in src, "verified test-case count missing")
+for phrase in ("What is not built", "listed in the runbooks",
+               "Nothing has been applied to real hardware"):
+    assert_(phrase.lower() not in low_early(src),
+            "build-state disclosure removed by request: %s" % phrase)
 assert_("2,933" not in src, "stale test count still present")
 
 # every layer in the repository's module table must appear
