@@ -75,6 +75,85 @@ function vis(el){if(!el)return false;var r=el.getBoundingClientRect();
 })();
 
 /* ============================================================
+   0b — THE HAND-OFF
+   Claims, stages and the arc geometry mirror the engine's own
+   Handoffs surface. No vendor is named: the claims are attributed
+   by category, which is the stronger telling.
+   ============================================================ */
+(function(){
+  var svg=$("hoArc"),btn=$("hoBtn"),st=$("hoSt"),nm=$("hoName"),
+      bC=$("hoClaim"),bK=$("hoCost"),bF=$("hoFind");
+  if(!svg) return;
+
+  var STAGES=["PLAN","PROCURE","COMMISSION","OFFER","SELL","ALLOCATE",
+              "PLACE","SERVE","ACCOUNT","ADJUDICATE","RENEW"];
+  var CLAIMS=[
+    {h:"Five times the utilisation", by:"an orchestration layer", from:5, to:6,
+     claim:"Idle capacity is lent out, quotas borrow from each other, and the same fleet carries several times the work.",
+     cost:"A fuller pool is a more fragmented one. Every additional workload placed leaves a partial node behind it, and a gang that needs four devices together stops fitting long before the pool is full. The utilisation figure rises the whole way down.",
+     find:"A quota of eight across eight nodes holding one free device each is eight deserved and nothing placeable. The arrangement has an author two stages upstream, and the utilisation number does not fall when it happens."},
+    {h:"Up to five times the revenue per GPU", by:"a service control plane", from:4, to:9,
+     claim:"Raw capacity becomes packaged, metered, sellable services, and each accelerator earns several times what renting it by the hour earned.",
+     cost:"Earning more per accelerator means promising more against each one. Every module checks its own promise against the pool and passes; nothing multiplies them out, so the book is discovered oversold on the Monday every promise is called at once rather than on the day it was signed.",
+     find:"Six surfaces, six yeses, one pool, and a conjunction that belongs to none of them. The shortfall has no owner, which is why nothing reports it until a customer does."},
+    {h:"Thirty times lower cost per token", by:"an inference runtime", from:7, to:4,
+     claim:"Quantisation, batching and speculative decoding cut what a token costs to produce by an order of magnitude.",
+     cost:"The cheapest of those settings changes the weights. The endpoint keeps its name, its URL and its version and starts returning different text, so the cost falls against a promise that was made about a different artifact.",
+     find:"Every evaluation that qualified the model ran on weights no longer being served. The platform recorded a configuration change; what happened was a substitution under a stable identity."}
+  ];
+  var WORDS=["no","one","two","three","four","five","six","seven","eight","nine","ten"];
+
+  var X0=8,BW=98,GAP=8,Y=44,H=46;
+  function x(i){return X0+i*(BW+GAP);}
+  function mid(i){return x(i)+BW/2;}
+
+  function draw(c){
+    var back=c.to<c.from, ay=back?Y-28:Y+H+28, out="";
+    for(var i=0;i<STAGES.length;i++){
+      var cls=c?(i===c.from?" src":(i===c.to?" dst":"")):"";
+      out+='<rect class="ho-bx'+cls+'" x="'+x(i)+'" y="'+Y+'" width="'+BW+'" height="'+H+'"/>'+
+           '<text class="ho-n" x="'+(x(i)+9)+'" y="'+(Y+17)+'">'+
+             (i<9?"0":"")+(i+1)+'</text>'+
+           '<text class="ho-k'+cls+'" x="'+(x(i)+9)+'" y="'+(Y+34)+'">'+STAGES[i]+'</text>';
+    }
+    var x1=mid(c.from),x2=mid(c.to),
+        d="M "+x1+" "+(back?Y:Y+H)+" C "+x1+" "+ay+", "+x2+" "+ay+", "+x2+" "+(back?Y:Y+H),
+        len=Math.abs(x2-x1)+Math.abs(ay-(back?Y:Y+H))*2;
+    out+='<path class="ho-path" style="--L:'+len.toFixed(0)+'" d="'+d+'"/>';
+    var dist=Math.abs(c.to-c.from),
+        cap=(back?"backward":"forward")+", "+(WORDS[dist]||dist)+" stage"+(dist===1?"":"s")+
+            "  →  lands on "+(c.to<9?"0":"")+(c.to+1)+" "+STAGES[c.to];
+    out+='<text class="ho-cap" x="'+X0+'" y="'+(back?14:166)+'">'+cap+'</text>';
+    svg.innerHTML=out;
+  }
+
+  var idx=-1,timers=[];
+  function show(c){
+    timers.forEach(clearTimeout); timers=[];
+    draw(c);
+    nm.innerHTML="HAND-OFF &middot; "+c.h.toUpperCase()+", CLAIMED BY "+c.by.toUpperCase();
+    st.textContent="TRACING"; st.className="st mono";
+    bC.querySelector("p").textContent=c.claim;
+    bK.querySelector("p").textContent=c.cost;
+    bF.querySelector("p").textContent=c.find;
+    [bC,bK,bF].forEach(function(b){b.classList.remove("on");});
+    timers.push(setTimeout(function(){
+      var pth=svg.querySelector(".ho-path"),cap=svg.querySelector(".ho-cap");
+      if(pth) pth.classList.add("go"); if(cap) cap.classList.add("go");
+    },reduce?0:120));
+    [bC,bK,bF].forEach(function(b,i){
+      timers.push(setTimeout(function(){
+        b.classList.add("on");
+        if(i===2){ st.textContent="CONSTRAINT RELOCATED"; st.className="st mono bad"; }
+      },(reduce?0:360)+i*(reduce?0:620)));
+    });
+  }
+  function next(){ idx=(idx+1)%CLAIMS.length; show(CLAIMS[idx]); }
+  btn.addEventListener("click",next);
+  onView($("ho"),next,.2);
+})();
+
+/* ============================================================
    1 — THE DERIVATION CHAIN
    ============================================================ */
 (function(){

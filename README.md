@@ -21,7 +21,7 @@ node qa.js            # 7 viewports + reduced-motion + reader, fails on overflow
 - every id the instruments reach for exists in the markup
 - precedence classes appear in repository order: LEGALITY > PHYSICS > DELIVERABILITY > ECONOMICS > PREFERENCE
 - all ten modules from the repository's own layer table are present
-- the verified figures survive: 99 rendered files, 2,933 test assertions
+- the verified figures survive: 99 rendered files, 4,059 test cases
 - claims discipline: no customer, prospect or tenant names; no competitor names;
   no patent-pending claim; no key/token patterns
 - insight cards and articles match one-to-one
@@ -31,6 +31,7 @@ node qa.js            # 7 viewports + reduced-motion + reader, fails on overflow
 | # | Section | Source of its figures |
 |---|---------|----------------------|
 | 0 | AI factory workflow | nine stages, owner / artifact / elapsed; tooling-coverage flags show software exists for 3 of 9 |
+| 0b | The hand-off | three published category claims, their stage of origin and the stage their cost lands on — mirrors the engine's own Handoffs surface; no vendor named |
 | 1 | Derivation chain | illustrative 70B FP8 workload, internally consistent arithmetic |
 | 2 | Three-valued adjudication | precedence order verified in `backend/tests/lab` |
 | 3 | Energization gate | illustrative sites; the gate logic is the claim |

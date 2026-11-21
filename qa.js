@@ -51,9 +51,14 @@ const VPS=[[1680,1000],[1440,900],[1180,820],[900,1000],[768,1024],[430,932],[36
       cw:document.documentElement.clientWidth,
       rays:document.querySelectorAll('#burst line').length,
       revealLeft:[...document.querySelectorAll('.reveal')].filter(e=>!e.classList.contains('in')).length,
+      ho:(document.getElementById('hoSt')||{}).textContent,
+      hoOn:document.querySelectorAll('.ho-b.on').length,
+      hoBx:document.querySelectorAll('#hoArc rect').length,
+      hoArc:!!document.querySelector('#hoArc .ho-path.go'),
       wf:(document.getElementById('wfSt')||{}).textContent,
       wfOn:document.querySelectorAll('.wf-r.on').length,
       wfLit:document.querySelectorAll('.wf-r.lit').length,
+    hoOn:document.querySelectorAll('.ho-b.on').length,
       ch:(document.getElementById('chSt')||{}).textContent,
       chVals:[...document.querySelectorAll('#chRail .cn-v')].filter(e=>e.textContent.trim()).length,
       adj:(document.getElementById('adjSt')||{}).textContent,
@@ -69,9 +74,10 @@ const VPS=[[1680,1000],[1440,900],[1180,820],[900,1000],[768,1024],[430,932],[36
     const ok = st.sw<=st.cw+1 && over.length===0 && errs.length===0 &&
                st.rays===104 && st.chVals===10 && st.adjChip &&
                st.enVd===5 && st.lfOn===10 && st.lfOut.includes('99 files') &&
-               st.wfOn===9 && st.wfLit===9;
+               st.wfOn===9 && st.wfLit===9 &&
+               st.hoOn===3 && st.hoBx===11 && st.hoArc;
     if(!ok)fail++;
-    console.log(`${ok?'PASS':'FAIL'} ${w}x${h}  sw=${st.sw}/${st.cw} rays=${st.rays} wf=${st.wfOn}/${st.wfLit} `+
+    console.log(`${ok?'PASS':'FAIL'} ${w}x${h}  sw=${st.sw}/${st.cw} rays=${st.rays} wf=${st.wfOn}/${st.wfLit} ho=${st.hoOn}/3,${st.hoBx} `+
       `reveal-left=${st.revealLeft} chain=${st.ch}(${st.chVals}/10) adj=${st.adj} `+
       `en=${st.en}(${st.enVd}/5) amp=${st.amp}/${st.ampB} lf=${st.lf}(${st.lfOn}/10)`);
     if(over.length)console.log('   overflow: '+over.join(' | '));
@@ -93,11 +99,12 @@ const VPS=[[1680,1000],[1440,900],[1180,820],[900,1000],[768,1024],[430,932],[36
     revealLeft:[...document.querySelectorAll('.reveal')].filter(e=>!e.classList.contains('in')).length,
     chVals:[...document.querySelectorAll('#chRail .cn-v')].filter(e=>e.textContent.trim()).length,
     wfLit:document.querySelectorAll('.wf-r.lit').length,
+    hoOn:document.querySelectorAll('.ho-b.on').length,
     lfOut:((document.getElementById('lfOut')||{}).textContent||'').includes('99 files'),
     adjChip:!!document.querySelector('#adjV .chip')}));
-  const rmok=rm.revealLeft===0&&rm.chVals===10&&rm.lfOut&&rm.adjChip&&rm.wfLit===9&&e2.length===0;
+  const rmok=rm.revealLeft===0&&rm.chVals===10&&rm.lfOut&&rm.adjChip&&rm.wfLit===9&&rm.hoOn===3&&e2.length===0;
   if(!rmok)fail++;
-  console.log(`${rmok?'PASS':'FAIL'} reduced-motion  reveal-left=${rm.revealLeft} wf=${rm.wfLit}/9 chain=${rm.chVals}/10 lf=${rm.lfOut} adj=${rm.adjChip} errs=${e2.length}`);
+  console.log(`${rmok?'PASS':'FAIL'} reduced-motion  reveal-left=${rm.revealLeft} wf=${rm.wfLit}/9 ho=${rm.hoOn}/3 chain=${rm.chVals}/10 lf=${rm.lfOut} adj=${rm.adjChip} errs=${e2.length}`);
   if(e2.length)console.log('   errors: '+e2.join(' | '));
 
   // reader modal

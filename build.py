@@ -8,7 +8,7 @@ before writing anything.
 import base64, pathlib, re, sys
 
 HERE = pathlib.Path(__file__).parent
-VERSION = "1.2.0"
+VERSION = "1.3.0"
 
 src = (HERE / "src.html").read_text()
 js = (HERE / "instruments.js").read_text()
@@ -77,7 +77,8 @@ assert_(pos == sorted(pos), "precedence classes appear out of order")
 
 # the verified render figure must survive the build
 assert_("99 files written to ./lab-repo" in src, "verified render output missing")
-assert_("2,933" in src, "verified test-assertion count missing")
+assert_("4,059" in src, "verified test-case count missing")
+assert_("2,933" not in src, "stale test count still present")
 
 # every layer in the repository's module table must appear
 for mod in ("vyuha-infra", "vyuha-cluster", "vyuha-nvidia", "vyuha-tenancy",
